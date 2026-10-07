@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101528">
+  <meta name="description" content="Friendly game coaching to help you plan your next Roblox game goal.">
+  <title>RBXupgrader — Game Coaching</title>
+  <style>
+    :root { color-scheme:dark; --bg:#101528; --panel:#171f39; --ink:#f7f8ff; --muted:#b9c5df; --blue:#64d9ff; --purple:#a791ff; --lime:#d7ff72; --line:#394b70; --pink:#ff74c8; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; overflow-x:hidden; background:radial-gradient(ellipse at 12% 0%,#294b7b 0%,transparent 42%),radial-gradient(ellipse at 94% 22%,#543577 0%,transparent 34%),linear-gradient(145deg,#101528,#151530 62%,#10283a); color:var(--ink); font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif; }
+    body::before { content:""; position:fixed; inset:0; z-index:-1; opacity:.2; pointer-events:none; background-image:linear-gradient(#8cbbff18 1px,transparent 1px),linear-gradient(90deg,#8cbbff18 1px,transparent 1px); background-size:34px 34px; mask-image:linear-gradient(to bottom,black,transparent 88%); }
+    .wrap { width:min(100% - 36px,980px); margin:auto; }
+    header { min-height:76px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #ffffff24; }
+    .logo { color:var(--ink); font-weight:850; font-size:1.12rem; text-decoration:none; letter-spacing:-.04em; }
+    .logo b { color:var(--lime); }
+    .currency { display:flex; gap:5px; padding:4px; border:1px solid #52658a; border-radius:12px; background:#11182bbb; }
+    .currency button { border:0; padding:7px 11px; background:transparent; color:var(--muted); border-radius:8px; font:650 .82rem system-ui,sans-serif; cursor:pointer; }
+    .currency button[aria-pressed="true"] { color:#101a2d; background:var(--lime); }
+    main { padding:65px 0 70px; }
+    .hero { position:relative; text-align:center; max-width:720px; margin:0 auto 36px; }
+    .eyebrow { display:inline-flex; align-items:center; gap:9px; color:var(--blue); font-size:.76rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+    .spark { width:9px; height:9px; border-radius:2px; transform:rotate(45deg); background:var(--lime); box-shadow:0 0 16px #d7ff72; }
+    h1 { margin:15px 0 14px; font-size:clamp(2.8rem,8vw,5rem); line-height:1.03; letter-spacing:-.065em; text-shadow:0 5px 30px #11152b; }
+    h1 span { color:var(--blue); }
+    .hero p { max-width:590px; margin:0 auto; color:#d0d7ea; font-size:1.06rem; }
+    .blocks { height:42px; display:flex; justify-content:center; gap:10px; margin:24px auto 0; }
+    .blocks i { display:block; width:28px; height:28px; border:1px solid #ffffff66; border-radius:7px; transform:rotate(12deg); box-shadow:0 8px 22px #080d1c66; }
+    .blocks i:nth-child(1) { background:linear-gradient(135deg,#63dcff,#3485e8); margin-top:10px; }
+    .blocks i:nth-child(2) { background:linear-gradient(135deg,#c09bff,#8359db); }
+    .blocks i:nth-child(3) { background:linear-gradient(135deg,#e6ff77,#80d871); margin-top:10px; }
+    .notice { max-width:720px; margin:0 auto 23px; padding:13px 16px; border:1px solid #5c83b7; border-radius:13px; background:#172c4de8; color:#e7f3ff; font-size:.9rem; box-shadow:0 12px 40px #080d1c44; }
+    .cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:17px; }
+    .card { position:relative; overflow:hidden; padding:25px; border:1px solid #52638a; border-radius:19px; background:linear-gradient(150deg,#1e2b49f5,#171a34f5); box-shadow:0 16px 42px #070d1f70; }
+    .card::after { content:""; position:absolute; width:94px; height:94px; top:-54px; right:-37px; border:12px solid #66d9ff18; transform:rotate(35deg); pointer-events:none; }
+    .card.featured { border-color:#a791ff; box-shadow:0 0 0 1px #a791ff33,0 16px 42px #070d1f70; }
+    .label { color:var(--blue); font-size:.76rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    h2 { margin:8px 0 4px; font-size:1.45rem; letter-spacing:-.03em; }
+    .desc { min-height:52px; color:var(--muted); margin:0 0 15px; font-size:.92rem; }
+    .price-row { display:flex; align-items:baseline; flex-wrap:wrap; gap:9px; min-height:57px; }
+    .price { font-size:2.7rem; font-weight:850; letter-spacing:-.06em; }
+    .old-price { display:none; color:#aeb2c8; font-size:1rem; text-decoration:line-through; }
+    .price-note { color:var(--muted); font-size:.86rem; }
+    ul { padding-left:19px; color:#d8deef; font-size:.9rem; }
+    li { margin:6px 0; }
+    .action { width:100%; margin-top:12px; padding:12px 16px; border:0; border-radius:11px; background:linear-gradient(100deg,var(--blue),#9cb5ff); color:#101a2b; font:750 .95rem system-ui,sans-serif; cursor:pointer; box-shadow:0 5px 18px #64d9ff30; }
+    .action:hover,.apply:hover { filter:brightness(1.08); }
+    .coupon { display:flex; align-items:end; gap:11px; flex-wrap:wrap; margin:19px 0 0; padding:20px 22px; border:1px solid #755db1; border-radius:17px; background:linear-gradient(120deg,#30244f,#1b2541); box-shadow:0 14px 36px #070d1f55; }
+    .coupon-copy { flex:1 1 230px; }
+    .coupon-copy h2 { margin:0 0 3px; }
+    .coupon-copy p { margin:0; color:#d0c9eb; font-size:.88rem; }
+    .code-label { display:block; margin:0 0 5px; color:#e3ddff; font-size:.76rem; font-weight:700; }
+    .coupon input { width:190px; min-height:42px; padding:9px 11px; border:1px solid #8174ae; border-radius:9px; outline:none; background:#11162a; color:white; font:600 .94rem system-ui,sans-serif; }
+    .coupon input:focus { border-color:var(--blue); box-shadow:0 0 0 3px #64d9ff28; }
+    .apply { min-height:42px; padding:9px 16px; border:0; border-radius:9px; background:var(--lime); color:#18221a; font:750 .9rem system-ui,sans-serif; cursor:pointer; }
+    #coupon-status { width:100%; min-height:1.2em; margin:0; color:#d7ffb3; font-size:.84rem; }
+    .details { margin:20px 0 0; padding:22px 24px; border:1px solid #4c9bb4; border-radius:18px; background:linear-gradient(120deg,#17334a,#1b2240); }
+    .details h2 { margin-top:0; }
+    .details p { margin:0 0 9px; color:#d5e9f1; }
+    .details a { color:var(--blue); font-weight:700; }
+    .details .safety { color:#d7ffb3; font-size:.9rem; }
+    .how { margin:20px 0 0; padding:22px 24px; border:1px solid #43577b; border-radius:18px; background:#151d35e8; }
+    .how h2 { margin-top:0; }
+    .how p { margin:0; color:var(--muted); }
+    .fine { margin:19px auto 0; max-width:730px; color:#aeb5ce; text-align:center; font-size:.78rem; }
+    footer { padding:19px 0 28px; border-top:1px solid #ffffff24; color:#a9b2cd; font-size:.82rem; text-align:center; }
+    footer strong { color:var(--ink); }
+    @media(max-width:800px) { .cards { grid-template-columns:1fr; } }
+    @media(max-width:620px) { .wrap { width:min(100% - 28px,980px); } main { padding:47px 0 52px; } .desc { min-height:0; } header { min-height:68px; } .coupon { align-items:stretch; } .coupon input { width:100%; } .coupon .apply { width:100%; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="logo" href="#top">RBX<b>upgrader</b></a>
+      <div class="currency" aria-label="Choose currency">
+        <button id="usd" type="button" aria-pressed="true">USD $</button>
+        <button id="inr" type="button" aria-pressed="false">INR ₹</button>
+      </div>
+    </header>
+    <main id="top">
+      <section class="hero">
+        <div class="eyebrow"><span class="spark" aria-hidden="true"></span> Friendly game coaching</div>
+        <h1>Make your next<br><span>level legendary.</span></h1>
+        <p>Get a simple plan or coaching for your game goal. You stay logged in and play on your own account while we help you plan the grind.</p>
+        <div class="blocks" aria-hidden="true"><i></i><i></i><i></i></div>
+      </section>
+      <p class="notice"><b>Keep your account safe:</b> Never share your Roblox password, cookies, or login codes. Coaching is guidance only; you control your account and play yourself.</p>
+      <section class="cards" aria-label="Coaching options">
+        <article class="card" data-plan="basic">
+          <div class="label">Quick start</div>
+          <h2>Basic Game Plan</h2>
+          <p class="desc">A short plan to help you get started on one goal in one game.</p>
+          <div class="price-row"><span class="old-price"></span><span class="price"></span><span class="price-note">one-time</span></div>
+          <ul><li>Share the game name and your goal</li><li>Get a simple set of next steps</li><li>You do the playing on your own account</li></ul>
+          <button class="action" type="button" data-service="Basic Game Plan">Choose this plan</button>
+        </article>
+        <article class="card featured" data-plan="hard">
+          <div class="label">For a tougher goal</div>
+          <h2>Hard Goal Coaching</h2>
+          <p class="desc">A little more help planning a difficult item, quest, or level.</p>
+          <div class="price-row"><span class="old-price"></span><span class="price"></span><span class="price-note">one-time</span></div>
+          <ul><li>Break the goal into manageable steps</li><li>Get tips for planning your grind</li><li>You stay in control and play yourself</li></ul>
+          <button class="action" type="button" data-service="Hard Goal Coaching">Choose this plan</button>
+        </article>
+        <article class="card" data-plan="avatar">
+          <div class="label">Style your character</div>
+          <h2>Avatar Upgrade Coaching</h2>
+          <p class="desc">Plan an avatar refresh with ideas for a style, colors, and items. You make the changes yourself.</p>
+          <div class="price-row"><span class="old-price"></span><span class="price"></span><span class="price-note">one-time</span></div>
+          <ul><li>Pick an avatar style or theme</li><li>Get suggestions for your upgrade</li><li>You stay logged in and make changes yourself</li></ul>
+          <button class="action" type="button" data-service="Avatar Upgrade Coaching">Choose this plan</button>
+        </article>
+      </section>
+      <form class="coupon" id="coupon-form">
+        <div class="coupon-copy"><h2>Got a coupon?</h2><p>Use <strong>Zenflix05</strong> for 50% off any coaching plan.</p></div>
+        <div><label class="code-label" for="coupon-code">Coupon code</label><input id="coupon-code" name="coupon" autocomplete="off" placeholder="Enter coupon code"></div>
+        <button class="apply" type="submit">Apply code</button>
+        <p id="coupon-status" role="status" aria-live="polite"></p>
+      </form>
+      <section class="details">
+        <h2>After payment</h2>
+        <p>Once checkout is connected and your payment is complete, email <a href="mailto:sonicplays1350@gmail.com?subject=RBXupgrader%20coaching%20request">sonicplays1350@gmail.com</a> with your plan, Roblox username or User ID, and game name or avatar goal.</p>
+        <p class="safety"><strong>Never email your password, login cookie, or verification code.</strong> You keep control of your Roblox account.</p>
+      </section>
+      <section class="how">
+        <h2>How it works</h2>
+        <p>Choose a coaching option, share the game name and goal, then get guidance. Each game's own rules apply, so coaching is only for goals that are allowed in that game.</p>
+      </section>
+      <p class="fine">USD prices are fixed. INR prices use about ₹96.70 per US$1 on October 7, 2026; exchange rates change. The avatar plan is ₹100 (about $1.03), and displayed prices are rounded to two decimals. This is a website preview: booking and payments are not connected yet. RBXupgrader is independent and is not affiliated with or endorsed by Roblox.</p>
+    </main>
+    <footer>Created by <strong>Anshuman Rathore</strong> · Play fair, keep your account safe, and enjoy the game.</footer>
+  </div>
+  <script>
+    const usdButton = document.querySelector('#usd');
+    const inrButton = document.querySelector('#inr');
+    const couponForm = document.querySelector('#coupon-form');
+    const couponInput = document.querySelector('#coupon-code');
+    const couponStatus = document.querySelector('#coupon-status');
+    const rate = 96.70;
+    let currency = 'usd';
+    let couponApplied = false;
+    const plans = { basic: 0.20, hard: 0.95, avatar: 100 / rate };
+
+    function formatMoney(amount, selectedCurrency) {
+      const symbol = selectedCurrency === 'usd' ? '$' : '₹';
+      const shown = selectedCurrency === 'usd'
+        ? (Math.round((amount + Number.EPSILON) * 100) / 100).toFixed(2)
+        : (Math.round((amount + Number.EPSILON) * 100) / 100).toFixed(2);
+      return `${symbol}${shown}`;
+    }
+
+    function updatePrices() {
+      document.querySelectorAll('[data-plan]').forEach((card) => {
+        const originalUsd = plans[card.dataset.plan];
+        const base = currency === 'usd' ? originalUsd : originalUsd * rate;
+        const oldPrice = card.querySelector('.old-price');
+        const price = card.querySelector('.price');
+        if (couponApplied) {
+          oldPrice.textContent = formatMoney(base, currency);
+          oldPrice.style.display = 'inline';
+          price.textContent = formatMoney(base * 0.5, currency);
+        } else {
+          oldPrice.textContent = '';
+          oldPrice.style.display = 'none';
+          price.textContent = formatMoney(base, currency);
+        }
+      });
+      usdButton.setAttribute('aria-pressed', String(currency === 'usd'));
+      inrButton.setAttribute('aria-pressed', String(currency === 'inr'));
+    }
+
+    usdButton.addEventListener('click', () => { currency = 'usd'; updatePrices(); });
+    inrButton.addEventListener('click', () => { currency = 'inr'; updatePrices(); });
+    couponForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (couponInput.value.trim().toLowerCase() === 'zenflix05'.toLowerCase()) {
+        couponApplied = true;
+        couponStatus.textContent = 'Coupon applied — 50% off is shown in the prices above.';
+        updatePrices();
+      } else {
+        couponApplied = false;
+        couponStatus.textContent = 'That code was not recognized. Check the spelling and try again.';
+        updatePrices();
+      }
+    });
+    document.querySelectorAll('[data-service]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const card = button.closest('[data-plan]');
+        const amountUsd = plans[card.dataset.plan] * (couponApplied ? 0.5 : 1);
+        const amount = currency === 'usd' ? amountUsd : amountUsd * rate;
+        alert(`${button.dataset.service} selected for ${formatMoney(amount, currency)}. This preview does not take bookings or payments yet.`);
+      });
+    });
+    updatePrices();
+  </script>
+</body>
+</html>
